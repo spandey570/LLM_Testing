@@ -1,6 +1,15 @@
 from deepeval import evaluate
 from deepeval.metrics import AnswerRelevancyMetric
 from deepeval.test_case import LLMTestCase
+from langchain_ollama import ChatOllama
+from dotenv import load_dotenv
+load_dotenv();
+
+CHAT_MODEL = ChatOllama(model="llama3.1:8b", temperature=0.6)
+
+PROMPT = "What is the capital of India"
+chat_response = CHAT_MODEL.invoke(PROMPT).content
+print("Chat model output:", chat_response)
 
 metric = AnswerRelevancyMetric(
     threshold=0.7,
@@ -8,9 +17,8 @@ metric = AnswerRelevancyMetric(
     include_reason=True
 )
 test_case = LLMTestCase(
-    input="What if these shoes don't fit?",
-    # Replace this with the output from your LLM app
-    actual_output="We offer a 30-day full refund at no extra cost."
+    input=PROMPT,
+    actual_output=chat_response,
 )
 
 # To run metric as a standalone
